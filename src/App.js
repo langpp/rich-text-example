@@ -1,74 +1,66 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import { Tabs, Card, Col, Row, Button } from 'antd';
 import DOMPurify from 'dompurify';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('1');
-  const [tinymceValue1, setTinymceValue1] = useState(`<h1>What is rich text?</h1><p>Rich Text is a field type that enables authors to create rich text content, similar to traditional "What you see is what you get" (wysiwyg) editors. The key difference here is that the Contentful Rich Text Field (RTF) response is returned as pure JSON rather than HTML. It offers common text formatting options such as paragraphs, lists and blockquotes, and allows entries and assets from Contentful to be linked dynamically and embedded within the flow of the text.</p>
-  
-  <h2 id="rich-text-on-the-web-app">Rich Text on the Web App</h2><img src="https://source.unsplash.com/random/900×700/?fruit" alt="Deskripsi Gambar" style="width:100%;max-width:300px;height:auto; margin:0px auto;display:block; position:relative;"><p>The menu bar at the top of the Rich Text editor provides authors with all the usual text formatting capabilities, including creating links to a static URL, and inserting links to Contentful entries and assets from within the same Contentful space or entries from other spaces with <a href="/help/references-across-spaces-in-rich-text-fields">cross-space references</a>.</p>
-  
-  <h2 id="rich-text-on-the-api-response">Rich Text on the API Response</h2>
-  <p>The RTF API response is returned as a JSON array of nodes that follows the format of an abstract syntax tree.</p>
-  <p>The following is an example of a RTF REST API response which returns a paragraph — "This text is important" — with the word "important" marked as bold:</p>
-  <pre style="background:whitesmoke;"><code class="language-json hljs">{
-    <span class="hljs-attr">"nodeType"</span>: <span class="hljs-string">"document"</span>,
-    <span class="hljs-attr">"data"</span>: {},
-    <span class="hljs-attr">"content"</span>: [
-      {
-        <span class="hljs-attr">"nodeType"</span>: <span class="hljs-string">"paragraph"</span>, <span class="hljs-comment">// Can be paragraphs, images, lists, embedded entries</span>
-        <span class="hljs-attr">"data"</span>: {},
-        <span class="hljs-attr">"content"</span>: [
-          {
-            <span class="hljs-attr">"nodeType"</span>: <span class="hljs-string">"text"</span>,
-            <span class="hljs-attr">"value"</span>: <span class="hljs-string">"This text is "</span>,
-            <span class="hljs-attr">"data"</span>: {},
-            <span class="hljs-attr">"marks"</span>: []
-          },
-          {
-            <span class="hljs-attr">"nodeType"</span>: <span class="hljs-string">"text"</span>,
-            <span class="hljs-attr">"value"</span>: <span class="hljs-string">"important"</span>,
-            <span class="hljs-attr">"data"</span>: {},
-            <span class="hljs-attr">"marks"</span>: [
-              <span class="hljs-string">"type"</span>: <span class="hljs-string">"bold"</span>
-            ]
-          }
-        ]
-      }
-    ]
-  }</code></pre>
+  const [tinymceValue1, setTinymceValue1] = useState(``);
+  const [tinymceValue2, setTinymceValue2] = useState(``);
+  const [tinymceValue3, setTinymceValue3] = useState(``);
+  const [tinymceValue4, setTinymceValue4] = useState(``);
+  const [tinymceValue5, setTinymceValue5] = useState(``);
+  const [tinymceValue6, setTinymceValue6] = useState(``);
+  const [tinymceValue7, setTinymceValue7] = useState(``);
+  const [tinymceValue8, setTinymceValue8] = useState(``);
+  const [tinymceValue9, setTinymceValue9] = useState(``);
+  const [tinymceValue10, setTinymceValue10] = useState(``);
+  const [tinymceValue11, setTinymceValue11] = useState(``);
+  const [tinymceValue12, setTinymceValue12] = useState(``);
+  const [tinymceValue13, setTinymceValue13] = useState(``);
+  const [tinymceValue14, setTinymceValue14] = useState(``);
+  const [tinymceValue15, setTinymceValue15] = useState(``);
+  const [tinymceValue16, setTinymceValue16] = useState(``);
+  const [tinymceValue17, setTinymceValue17] = useState(``);
+  const [tinymceValue18, setTinymceValue18] = useState(``);
+  const [tinymceValue19, setTinymceValue19] = useState(``);
 
-  <table border="1" style="width:100%;border-collapse:collapse"><tr><th>Nama</th><th>Umur</th><th>Pekerjaan</th></tr><tr><td>Alice</td><td>30</td><td>Desainer Grafis</td></tr><tr><td>Bob</td><td>25</td><td>Developer Web</td></tr><tr><td>Charlie</td><td>35</td><td>Penulis</td></tr></table>
-  
-  <h2 id="embedded-and-linked-entries-in-rich-text">Embedded and Linked Entries in Rich Text</h2>
-  <p>Rich Text allows editors to link and embed entries in the flow of text in the UI. These links are returned in the RTF API response as references, and the referenced data is returned in a separate object (more on this below). As a developer, this gives you the flexibility on the front end to build out the HTML you need for linked assets and entries rather than having to deal with opinionated HTML and formatting from the API.</p>
-  <p>For example, you might want to:</p>
-  <ul>
-  <li>Use custom anchor link wrappers, such as a React Router link or a NextJS Link in your single page application for inline links in Rich Text</li>
-  <li>Use the <a href="/developers/docs/references/images-api/">Contentful Images API</a> to resize, crop and manipulate an image that is returned as a linked asset</li>
-  <li>Render a widget such as an image gallery, a product description box, a sign up form, an annotation window or anything else in the flow of the RTF!</li>
-  </ul>
-  `);
-  
-  const [tinymceValue2, setTinymceValue2] = useState(`<h1>What is Lorem Ipsum?</h1><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p><h2>What is Lorem Ipsum?</h2><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>`);
-  const [tinymceValue3, setTinymceValue3] = useState(tinymceValue2);
-  const [tinymceValue4, setTinymceValue4] = useState(tinymceValue2);
-  const [tinymceValue5, setTinymceValue5] = useState(tinymceValue2);
-  const [tinymceValue6, setTinymceValue6] = useState(tinymceValue2);
-  const [tinymceValue7, setTinymceValue7] = useState(tinymceValue2);
-  const [tinymceValue8, setTinymceValue8] = useState(tinymceValue2);
-  const [tinymceValue9, setTinymceValue9] = useState(tinymceValue2);
-  const [tinymceValue10, setTinymceValue10] = useState(tinymceValue2);
-  const [tinymceValue11, setTinymceValue11] = useState(tinymceValue2);
-  const [tinymceValue12, setTinymceValue12] = useState(tinymceValue2);
-  const [tinymceValue13, setTinymceValue13] = useState(tinymceValue2);
-  const [tinymceValue14, setTinymceValue14] = useState(tinymceValue2);
-  const [tinymceValue15, setTinymceValue15] = useState(tinymceValue2);
-  const [tinymceValue16, setTinymceValue16] = useState(tinymceValue2);
-  const [tinymceValue17, setTinymceValue17] = useState(tinymceValue2);
-  const [tinymceValue18, setTinymceValue18] = useState(tinymceValue2);
-  const [tinymceValue19, setTinymceValue19] = useState(tinymceValue2);
+  const fetchData = async () => {
+    try {
+      const response = await fetch('https://orangelineid.com/core.php?act=all');
+      const jsonData = await response.json();
+      setTinymceValue1(jsonData.text_1);
+      setTinymceValue2(jsonData.text_2);
+      setTinymceValue3(jsonData.text_3);
+      setTinymceValue4(jsonData.text_4);
+      setTinymceValue5(jsonData.text_5);
+      setTinymceValue6(jsonData.text_6);
+      setTinymceValue7(jsonData.text_7);
+      setTinymceValue8(jsonData.text_8);
+      setTinymceValue8(jsonData.text_8);
+      setTinymceValue10(jsonData.text_10);
+      setTinymceValue11(jsonData.text_11);
+      setTinymceValue12(jsonData.text_12);
+      setTinymceValue13(jsonData.text_13);
+      setTinymceValue14(jsonData.text_14);
+      setTinymceValue15(jsonData.text_15);
+      setTinymceValue16(jsonData.text_16);
+      setTinymceValue17(jsonData.text_17);
+      setTinymceValue18(jsonData.text_18);
+      setTinymceValue19(jsonData.text_19);
+
+    } catch (error) {
+      toast.error("Error Data Cannot Be Load !", {
+        position: "top-right"
+      });
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [tinymceValue1]);
 
   const sanitizedHtml1 = DOMPurify.sanitize(tinymceValue1);
   const sanitizedHtml2 = DOMPurify.sanitize(tinymceValue2);
@@ -110,7 +102,7 @@ export default function App() {
   const editorRef18 = useRef(null);
   const editorRef19 = useRef(null);
 
-  const log = () => {
+  const log = async() => {
     if (editorRef1.current) {
       setTinymceValue1(editorRef1.current.getContent());
     }
@@ -186,8 +178,51 @@ export default function App() {
     if (editorRef19.current) {
       setTinymceValue19(editorRef19.current.getContent());
     }
-    
-    setActiveTab('2');
+
+    try {
+      const postData = {
+        text_1: editorRef1.current.getContent(),
+        text_2: editorRef2.current.getContent(),
+        text_3: editorRef3.current.getContent(),
+        text_4: editorRef4.current.getContent(),
+        text_5: editorRef5.current.getContent(),
+        text_6: editorRef6.current.getContent(),
+        text_7: editorRef7.current.getContent(),
+        text_8: editorRef8.current.getContent(),
+        text_9: editorRef9.current.getContent(),
+        text_10: editorRef10.current.getContent(),
+        text_11: editorRef11.current.getContent(),
+        text_12: editorRef12.current.getContent(),
+        text_13: editorRef13.current.getContent(),
+        text_14: editorRef14.current.getContent(),
+        text_15: editorRef15.current.getContent(),
+        text_16: editorRef16.current.getContent(),
+        text_17: editorRef17.current.getContent(),
+        text_18: editorRef18.current.getContent(),
+        text_19: editorRef19.current.getContent(),
+      }
+      const response = await fetch('https://orangelineid.com/core.php?act=save', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(postData),
+      });
+      const jsonData = await response.json();
+      if (jsonData.status !== 'ok' ) {
+        return toast.error("Error Save Data !", {
+          position: "top-right"
+        });
+      }
+
+      return toast.success("Data Saved Succesfully!", {
+        position: "top-right"
+      });
+    } catch (error) {
+      return toast.error("Failed Save Data !", {
+        position: "top-right"
+      });
+    }
   };
 
   const onChange = (key) => {
@@ -655,6 +690,7 @@ export default function App() {
   return (
     <>
       <div className='container'>
+      <ToastContainer />
         <Row gutter={24}>
           <Col span={24}>
             <Card title="Rich Text" bordered={true} className="margin-bottom-60">
